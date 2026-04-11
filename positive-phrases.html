@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Positive Phrases — IELTS Academic Writing</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3350;
+      --accent: #6c8ef7;
+      --accent2: #a78bfa;
+      --text: #e2e6f0;
+      --muted: #8b92b3;
+      --b2: #34d399;
+      --b2c1: #22d3ee;
+      --c1: #f59e0b;
+      --c1c2: #fb923c;
+      --c2: #f43f5e;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+
+    /* ── Header ── */
+    header {
+      max-width: 1100px;
+      margin: 0 auto 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #34d399, #6c8ef7, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: .4rem;
+    }
+
+    header p { color: var(--muted); font-size: .95rem; }
+
+    /* ── Stats ── */
+    .stats {
+      display: flex;
+      gap: .75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 1100px;
+      margin: 0 auto 2rem;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .55rem 1.1rem;
+      font-size: .8rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .stat strong { color: var(--text); font-size: 1.05rem; display: block; }
+
+    /* ── Tabs ── */
+    .tabs {
+      max-width: 1100px;
+      margin: 0 auto 0;
+      display: flex;
+      gap: .3rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+
+    .tab-btn {
+      background: none;
+      border: 1px solid transparent;
+      border-bottom: none;
+      color: var(--muted);
+      border-radius: 8px 8px 0 0;
+      padding: .5rem 1rem;
+      font-size: .82rem;
+      cursor: pointer;
+      transition: all .2s;
+      position: relative;
+      bottom: -1px;
+    }
+
+    .tab-btn:hover { color: var(--text); background: var(--surface2); }
+
+    .tab-btn.active {
+      background: var(--surface);
+      border-color: var(--border);
+      border-bottom-color: var(--surface);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ── Controls ── */
+    .controls {
+      max-width: 1100px;
+      margin: 1.25rem auto 1.25rem;
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-wrap { flex: 1; min-width: 200px; position: relative; }
+
+    .search-wrap svg {
+      position: absolute; left: .75rem; top: 50%;
+      transform: translateY(-50%); color: var(--muted); pointer-events: none;
+    }
+
+    input[type="search"] {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: .55rem .75rem .55rem 2.3rem;
+      font-size: .9rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    input[type="search"]:focus { border-color: var(--accent); }
+    input[type="search"]::placeholder { color: var(--muted); }
+
+    .cefr-filters { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+    .filter-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 20px;
+      padding: .35rem .85rem;
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .filter-btn:hover { color: var(--text); }
+    .filter-btn[data-cefr="all"].active  { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .filter-btn[data-cefr="B2"].active   { background: rgba(52,211,153,.25); border-color: var(--b2); color: var(--b2); }
+    .filter-btn[data-cefr="C1"].active   { background: rgba(245,158,11,.25); border-color: var(--c1); color: var(--c1); }
+    .filter-btn[data-cefr="C2"].active   { background: rgba(244,63,94,.25);  border-color: var(--c2); color: var(--c2); }
+
+    /* ── CEFR badges ── */
+    .badge {
+      font-size: .67rem;
+      font-weight: 700;
+      padding: .18rem .5rem;
+      border-radius: 20px;
+      letter-spacing: .04em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .b-b2   { background: rgba(52,211,153,.15);  color: var(--b2);   border: 1px solid rgba(52,211,153,.3); }
+    .b-b2c1 { background: rgba(34,211,238,.15);  color: var(--b2c1); border: 1px solid rgba(34,211,238,.3); }
+    .b-c1   { background: rgba(245,158,11,.15);  color: var(--c1);   border: 1px solid rgba(245,158,11,.3); }
+    .b-c1c2 { background: rgba(251,146,60,.15);  color: var(--c1c2); border: 1px solid rgba(251,146,60,.3); }
+    .b-c2   { background: rgba(244,63,94,.15);   color: var(--c2);   border: 1px solid rgba(244,63,94,.3); }
+
+    /* ── Sections ── */
+    .section { max-width: 1100px; margin: 0 auto; display: none; }
+    .section.active { display: block; }
+
+    /* ── Tips box ── */
+    .tips-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 12px 12px 0;
+      padding: 1.1rem 1.3rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .tips-box h3 {
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--accent);
+      margin-bottom: .75rem;
+    }
+
+    .tips-row { display: flex; gap: 2.5rem; flex-wrap: wrap; }
+
+    .tips-col h4 { font-size: .78rem; color: var(--muted); margin-bottom: .4rem; }
+
+    .tips-col .tip-item {
+      font-size: .8rem;
+      margin-bottom: .2rem;
+    }
+
+    .tips-col .tip-item .old { color: var(--c2); text-decoration: line-through; }
+    .tips-col .tip-item .new { color: var(--b2); font-weight: 600; }
+
+    /* ── Card grid ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: .9rem;
+    }
+
+    /* ── Compact grid ── */
+    .compact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: .6rem;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .55rem;
+      transition: border-color .2s, transform .15s;
+    }
+
+    .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: .5rem;
+    }
+
+    .card-phrase { font-size: .98rem; font-weight: 700; color: var(--text); line-height: 1.35; }
+    .card-vi { font-size: .83rem; color: var(--accent2); font-style: italic; }
+    .card-note {
+      font-size: .76rem;
+      color: var(--muted);
+      background: var(--surface2);
+      padding: .35rem .6rem;
+      border-radius: 6px;
+    }
+
+    .card-example {
+      font-size: .8rem;
+      color: var(--muted);
+      font-style: italic;
+      background: var(--surface2);
+      border-left: 3px solid var(--accent);
+      padding: .5rem .75rem;
+      border-radius: 0 6px 6px 0;
+      line-height: 1.55;
+    }
+
+    /* ── Word card (compact) ── */
+    .word-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .7rem .9rem;
+      display: flex;
+      flex-direction: column;
+      gap: .25rem;
+      transition: border-color .2s;
+    }
+
+    .word-card:hover { border-color: var(--accent); }
+
+    .word-card-top { display: flex; justify-content: space-between; align-items: center; gap: .4rem; }
+    .word-card .wrd { font-weight: 700; font-size: .9rem; }
+    .word-card .vi  { font-size: .75rem; color: var(--accent2); }
+
+    /* ── Example cards ── */
+    .ex-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.3rem;
+      margin-bottom: .75rem;
+    }
+
+    .ex-en {
+      font-size: .92rem;
+      color: var(--text);
+      line-height: 1.65;
+      margin-bottom: .5rem;
+    }
+
+    .ex-en mark {
+      background: rgba(108,142,247,.2);
+      color: var(--accent);
+      padding: .05em .2em;
+      border-radius: 3px;
+      font-style: normal;
+    }
+
+    .ex-vi {
+      font-size: .82rem;
+      color: var(--muted);
+      font-style: italic;
+      line-height: 1.5;
+      padding-left: .75rem;
+      border-left: 2px solid var(--border);
+    }
+
+    /* ── Empty ── */
+    .empty { text-align: center; padding: 3rem; color: var(--muted); font-size: .9rem; }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      font-weight: 600;
+      margin: 1.5rem 0 .6rem;
+    }
+
+    .section-label:first-child { margin-top: 0; }
+
+    @media (max-width: 540px) {
+      header h1 { font-size: 1.5rem; }
+      .card-grid  { grid-template-columns: 1fr; }
+      .compact-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Positive Phrases for IELTS Writing</h1>
+  <p>Outcome phrases · noun phrases · powerful verbs · adjectives · key topic nouns</p>
+</header>
+
+<div class="stats" id="stats"></div>
+
+<!-- Tabs -->
+<div class="tabs" id="tabs">
+  <button class="tab-btn active" data-tab="phrases">Outcome Phrases</button>
+  <button class="tab-btn" data-tab="nouns">Noun Phrases</button>
+  <button class="tab-btn" data-tab="verbs">Verbs</button>
+  <button class="tab-btn" data-tab="adjectives">Adjectives</button>
+  <button class="tab-btn" data-tab="topics">Key Topics</button>
+  <button class="tab-btn" data-tab="examples">Band 9 Examples</button>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="search" id="search" placeholder="Search phrases, meanings, Vietnamese…" />
+  </div>
+  <div class="cefr-filters" id="cefrFilters"></div>
+</div>
+
+<!-- ── Phrases tab ── -->
+<div class="section active" id="tab-phrases">
+  <div class="tips-box">
+    <h3>Upgrade your language</h3>
+    <div class="tips-row">
+      <div class="tips-col">
+        <h4>Instead of "lead to":</h4>
+        <div class="tip-item">→ <span class="new">pave the way for</span></div>
+        <div class="tip-item">→ <span class="new">bring about</span></div>
+        <div class="tip-item">→ <span class="new">serve as a catalyst for</span></div>
+      </div>
+      <div class="tips-col">
+        <h4>Instead of "may result in":</h4>
+        <div class="tip-item">→ <span class="new">culminate in</span></div>
+        <div class="tip-item">→ <span class="new">foster</span></div>
+        <div class="tip-item">→ <span class="new">hold promise for</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="card-grid" id="phrases-grid"></div>
+</div>
+
+<!-- ── Noun phrases tab ── -->
+<div class="section" id="tab-nouns">
+  <div class="card-grid" id="nouns-grid"></div>
+</div>
+
+<!-- ── Verbs tab ── -->
+<div class="section" id="tab-verbs">
+  <div class="compact-grid" id="verbs-grid"></div>
+</div>
+
+<!-- ── Adjectives tab ── -->
+<div class="section" id="tab-adjectives">
+  <div class="compact-grid" id="adjectives-grid"></div>
+</div>
+
+<!-- ── Key topics tab ── -->
+<div class="section" id="tab-topics">
+  <div class="compact-grid" id="topics-grid"></div>
+</div>
+
+<!-- ── Band 9 examples tab ── -->
+<div class="section" id="tab-examples">
+  <div id="examples-list"></div>
+</div>
+
+<script>
+// ──────────────────────────────────────────────
+//  DATA
+// ──────────────────────────────────────────────
+
+const phrases = [
+  { phrase: "which may pave the way for [positive outcome]", cefr: "C1",    vi: "mở đường cho…",                          note: "Dùng trong các essay policy, innovation, education" },
+  { phrase: "which has the potential to bring about",        cefr: "C1–C2", vi: "có khả năng mang lại…",                  note: "Mạnh mẽ nhưng không tuyệt đối" },
+  { phrase: "which could ultimately give rise to",           cefr: "C2",    vi: "cuối cùng có thể tạo ra…",               note: "Nhấn mạnh quá trình dài hạn" },
+  { phrase: "which is likely to culminate in",               cefr: "C2",    vi: "có khả năng kết thúc bằng…",            note: "Thường dùng với kết quả tích cực sau chuỗi hành động" },
+  { phrase: "which may serve as a catalyst for",             cefr: "C2",    vi: "có thể đóng vai trò chất xúc tác cho…", note: "Cực kỳ học thuật, rất hay dùng cho tech/social essays" },
+  { phrase: "which could lay the foundation for",            cefr: "C1–C2", vi: "có thể đặt nền tảng cho…",              note: "Mạnh về học thuật, logic" },
+  { phrase: "which in turn may foster",                      cefr: "C1",    vi: "từ đó có thể thúc đẩy…",               note: "Mang sắc thái nguyên nhân–kết quả mềm mại" },
+  { phrase: "which may act as a springboard for",            cefr: "C2",    vi: "có thể làm bàn đạp cho…",               note: "Gợi cảm giác phát triển đột phá" },
+  { phrase: "which is conducive to [noun/gerund]",           cefr: "C2",    vi: "có lợi cho…",                            note: 'Cực học thuật, dùng thay cho "good for"' },
+  { phrase: "which holds promise for",                       cefr: "C1",    vi: "hứa hẹn mang lại…",                     note: "Lạc quan, nhẹ nhàng, dùng tốt cho đề tài công nghệ, giáo dục" },
+];
+
+const nouns = [
+  { phrase: "a cost-effective and practical alternative", cefr: "C1",    vi: "một giải pháp thay thế tiết kiệm chi phí và thực tế", example: "Vocational training offers a cost-effective and practical alternative to traditional academic pathways, especially for students from underprivileged backgrounds." },
+  { phrase: "a more flexible framework",                  cefr: "C1",    vi: "một hệ thống linh hoạt hơn",                          example: "Online education provides a more flexible framework, allowing learners to study at their own pace and convenience." },
+  { phrase: "a sustainable long-term solution",           cefr: "C1",    vi: "một giải pháp bền vững dài hạn",                      example: "Investing in renewable energy is widely considered a sustainable long-term solution to the global energy crisis." },
+  { phrase: "a viable option",                            cefr: "B2",    vi: "một lựa chọn khả thi",                                example: "For students not academically inclined, vocational education presents a viable option that leads directly to employment." },
+  { phrase: "a gateway to better opportunities",          cefr: "B2",    vi: "cánh cửa dẫn đến nhiều cơ hội hơn",                  example: "Obtaining a university degree can be a gateway to better career opportunities and higher income." },
+  { phrase: "an effective means of…",                    cefr: "B2–C1", vi: "một phương tiện hiệu quả để…",                       example: "Physical education is an effective means of promoting a healthy lifestyle among young people." },
+  { phrase: "a stepping stone to success",                cefr: "C1",    vi: "bàn đạp dẫn tới thành công",                         example: "Internships often serve as a stepping stone to professional success by providing hands-on experience." },
+  { phrase: "a win-win situation",                        cefr: "B2",    vi: "tình huống đôi bên cùng có lợi",                     example: "Allowing employees to work remotely creates a win-win situation for both employers and staff." },
+  { phrase: "a time-efficient approach",                  cefr: "C1",    vi: "phương pháp tiết kiệm thời gian",                    example: "Learning through short video tutorials is a time-efficient approach for acquiring practical skills." },
+  { phrase: "a boost to…",                               cefr: "B2",    vi: "sự thúc đẩy cho…",                                   example: "Tourism provides a substantial boost to the local economy by creating jobs and generating revenue." },
+  { phrase: "a positive social impact",                   cefr: "C1",    vi: "tác động xã hội tích cực",                           example: "Volunteering has a positive social impact as it fosters a sense of community and responsibility." },
+  { phrase: "a reduction in long-term costs",             cefr: "B2–C1", vi: "sự giảm chi phí về lâu dài",                        example: "Switching to public transport leads to a reduction in long-term costs associated with traffic congestion and pollution." },
+  { phrase: "an incentive for…",                         cefr: "B2",    vi: "một động lực để…",                                   example: "Tax cuts can act as an incentive for businesses to invest in environmentally friendly practices." },
+  { phrase: "an accessible alternative",                  cefr: "C1",    vi: "giải pháp thay thế dễ tiếp cận hơn",                example: "E-books provide an accessible alternative for students who cannot afford traditional textbooks." },
+  { phrase: "a catalyst for change",                      cefr: "C1",    vi: "chất xúc tác cho sự thay đổi",                      example: "Technological advancement serves as a catalyst for change in the education system." },
+];
+
+const verbs = [
+  { word: "Offer",       cefr: "B2", vi: "cung cấp, mang lại" },
+  { word: "Provide",     cefr: "B2", vi: "cung cấp" },
+  { word: "Facilitate",  cefr: "C1", vi: "tạo điều kiện thuận lợi" },
+  { word: "Promote",     cefr: "B2", vi: "thúc đẩy" },
+  { word: "Boost",       cefr: "B2", vi: "tăng cường" },
+  { word: "Enhance",     cefr: "C1", vi: "nâng cao, cải thiện" },
+  { word: "Empower",     cefr: "C1", vi: "trao quyền, tạo điều kiện" },
+  { word: "Encourage",   cefr: "B2", vi: "khuyến khích" },
+  { word: "Advance",     cefr: "C1", vi: "thúc đẩy, cải thiện" },
+  { word: "Broaden",     cefr: "B2", vi: "mở rộng" },
+  { word: "Strengthen",  cefr: "B2", vi: "củng cố, làm mạnh thêm" },
+  { word: "Uplift",      cefr: "C2", vi: "nâng cao tinh thần / vị thế" },
+  { word: "Revive",      cefr: "C1", vi: "hồi sinh, khôi phục" },
+  { word: "Regenerate",  cefr: "C2", vi: "tái tạo, phục hồi" },
+  { word: "Deliver",     cefr: "B2", vi: "mang lại (kết quả, dịch vụ)" },
+  { word: "Foster",      cefr: "C1", vi: "nuôi dưỡng, thúc đẩy" },
+  { word: "Drive",       cefr: "B2", vi: "thúc đẩy (sự thay đổi, tăng trưởng)" },
+  { word: "Contribute",  cefr: "B2", vi: "đóng góp" },
+  { word: "Nurture",     cefr: "C1", vi: "nuôi dưỡng (tài năng, kỹ năng)" },
+  { word: "Cultivate",   cefr: "C1", vi: "vun đắp, nuôi dưỡng" },
+  { word: "Expand",      cefr: "B2", vi: "mở rộng" },
+  { word: "Reform",      cefr: "B2", vi: "cải cách" },
+  { word: "Recharge",    cefr: "C1", vi: "nạp lại năng lượng" },
+  { word: "Enable",      cefr: "B2", vi: "cho phép, giúp" },
+  { word: "Legitimize",  cefr: "C2", vi: "hợp pháp hóa, làm chính đáng" },
+  { word: "Rectify",     cefr: "C1", vi: "sửa chữa, điều chỉnh" },
+  { word: "Trigger",     cefr: "B2", vi: "khơi nguồn, kích hoạt" },
+  { word: "Bolster",     cefr: "C1", vi: "củng cố, tăng cường" },
+  { word: "Instill",     cefr: "C1", vi: "truyền dẫn (niềm tin, giá trị, phẩm chất)" },
+  { word: "Enrich",      cefr: "B2", vi: "làm giàu thêm, cải thiện chất lượng" },
+  { word: "Alleviate",   cefr: "C1", vi: "giảm bớt, làm dịu" },
+  { word: "Mitigate",    cefr: "C1", vi: "giảm thiểu (tác hại, tiêu cực)" },
+  { word: "Accelerate",  cefr: "C1", vi: "thúc đẩy, làm tăng tốc" },
+  { word: "Address",     cefr: "B2", vi: "giải quyết (vấn đề)" },
+  { word: "Tackle",      cefr: "B2", vi: "xử lý, đối phó" },
+  { word: "Transform",   cefr: "B2", vi: "thay đổi hoàn toàn" },
+  { word: "Reshape",     cefr: "C2", vi: "tái định hình" },
+  { word: "Adapt",       cefr: "B2", vi: "thích nghi, điều chỉnh" },
+  { word: "Optimize",    cefr: "C1", vi: "tối ưu hóa" },
+  { word: "Integrate",   cefr: "C1", vi: "tích hợp, hòa nhập" },
+  { word: "Ensure",      cefr: "B2", vi: "đảm bảo" },
+  { word: "Guarantee",   cefr: "B2", vi: "đảm bảo, cam kết" },
+  { word: "Maintain",    cefr: "B2", vi: "duy trì" },
+  { word: "Preserve",    cefr: "B2", vi: "bảo tồn, giữ gìn" },
+  { word: "Balance",     cefr: "B2", vi: "cân bằng" },
+  { word: "Harness",     cefr: "C1", vi: "khai thác, tận dụng" },
+  { word: "Stimulate",   cefr: "C1", vi: "kích thích" },
+  { word: "Support",     cefr: "B2", vi: "hỗ trợ" },
+  { word: "Secure",      cefr: "C1", vi: "đảm bảo, đạt được chắc chắn" },
+  { word: "Inspire",     cefr: "B2", vi: "truyền cảm hứng" },
+  { word: "Reinforce",   cefr: "C1", vi: "củng cố, làm mạnh thêm" },
+  { word: "Ignite",      cefr: "C1", vi: "khơi dậy (ý tưởng, phong trào)" },
+  { word: "Mobilize",    cefr: "C1", vi: "huy động (nguồn lực, con người)" },
+  { word: "Implement",   cefr: "B2", vi: "thực hiện, triển khai" },
+  { word: "Generate",    cefr: "B2", vi: "tạo ra" },
+  { word: "Shape",       cefr: "B2", vi: "hình thành" },
+  { word: "Streamline",  cefr: "C1", vi: "tinh gọn, làm hiệu quả hơn" },
+  { word: "Uphold",      cefr: "C1", vi: "duy trì, bảo vệ (nguyên tắc, giá trị)" },
+  { word: "Bridge",      cefr: "B2", vi: "thu hẹp, làm cầu nối" },
+  { word: "Reinstate",   cefr: "C2", vi: "khôi phục lại (chính sách, hệ thống)" },
+];
+
+const adjectives = [
+  { word: "Pragmatic",      cefr: "C1", vi: "thực tế, thực dụng" },
+  { word: "Effective",      cefr: "B2", vi: "hiệu quả" },
+  { word: "Realistic",      cefr: "B2", vi: "thực tế, khả thi" },
+  { word: "Sustainable",    cefr: "B2", vi: "bền vững" },
+  { word: "Viable",         cefr: "C1", vi: "khả thi, có thể thực hiện được" },
+  { word: "Enduring",       cefr: "C1", vi: "lâu dài, bền bỉ" },
+  { word: "Affordable",     cefr: "B2", vi: "có thể chi trả, giá cả hợp lý" },
+  { word: "Innovative",     cefr: "B2", vi: "đổi mới, sáng tạo" },
+  { word: "Resilient",      cefr: "C1", vi: "kiên cường, thích nghi tốt" },
+  { word: "Cost-effective", cefr: "C1", vi: "hiệu quả về chi phí" },
+  { word: "Cutting-edge",   cefr: "C2", vi: "tiên tiến, hiện đại" },
+  { word: "Practical",      cefr: "B2", vi: "thiết thực" },
+  { word: "Hands-on",       cefr: "C1", vi: "thực hành, trực tiếp" },
+  { word: "Robust",         cefr: "C1", vi: "mạnh mẽ, vững chắc" },
+  { word: "Equitable",      cefr: "C2", vi: "công bằng, không thiên vị" },
+  { word: "Inclusive",      cefr: "C1", vi: "bao trùm, hòa nhập" },
+  { word: "Strategic",      cefr: "C1", vi: "mang tính chiến lược" },
+  { word: "Feasible",       cefr: "C1", vi: "khả thi" },
+  { word: "Holistic",       cefr: "C2", vi: "toàn diện" },
+  { word: "Scalable",       cefr: "C1", vi: "có thể mở rộng" },
+  { word: "Adaptable",      cefr: "C1", vi: "có khả năng thích nghi" },
+  { word: "Flexible",       cefr: "B2", vi: "linh hoạt" },
+  { word: "Transformative", cefr: "C2", vi: "có tính cách mạng, thay đổi lớn" },
+  { word: "Empowering",     cefr: "C1", vi: "truyền sức mạnh, tạo điều kiện" },
+  { word: "Ethical",        cefr: "B2", vi: "đạo đức, đúng đắn" },
+  { word: "Transparent",    cefr: "C1", vi: "minh bạch" },
+  { word: "Constructive",   cefr: "B2", vi: "mang tính xây dựng" },
+  { word: "Progressive",    cefr: "C1", vi: "tiến bộ, hiện đại" },
+  { word: "Data-driven",    cefr: "C2", vi: "dựa trên dữ liệu" },
+  { word: "Accessible",     cefr: "B2", vi: "dễ tiếp cận" },
+];
+
+const topics = [
+  { phrase: "Social infrastructure",       cefr: "C1", vi: "cơ sở hạ tầng xã hội" },
+  { phrase: "Educational attainment",       cefr: "B2", vi: "trình độ học vấn đạt được" },
+  { phrase: "Alternative opportunities",    cefr: "B2", vi: "cơ hội thay thế" },
+  { phrase: "Lifelong learning outcomes",   cefr: "C1", vi: "kết quả học tập lâu dài" },
+  { phrase: "Employment prospects",         cefr: "B2", vi: "triển vọng nghề nghiệp" },
+  { phrase: "Economic resilience",          cefr: "C1", vi: "khả năng phục hồi kinh tế" },
+  { phrase: "Environmental sustainability", cefr: "B2", vi: "sự bền vững môi trường" },
+  { phrase: "Public awareness",             cefr: "B2", vi: "nhận thức cộng đồng" },
+  { phrase: "Skill acquisition",            cefr: "C1", vi: "việc tiếp thu kỹ năng" },
+  { phrase: "Policy intervention",          cefr: "C1", vi: "can thiệp chính sách" },
+  { phrase: "Financial burden",             cefr: "B2", vi: "gánh nặng tài chính" },
+  { phrase: "Cultural preservation",        cefr: "C1", vi: "bảo tồn văn hóa" },
+  { phrase: "Technological advancement",    cefr: "B2", vi: "tiến bộ công nghệ" },
+  { phrase: "Workforce participation",      cefr: "C1", vi: "sự tham gia vào lực lượng lao động" },
+  { phrase: "Youth empowerment",            cefr: "C1", vi: "sự trao quyền cho giới trẻ" },
+  { phrase: "Educational inequality",       cefr: "C1", vi: "bất bình đẳng trong giáo dục" },
+  { phrase: "Vocational pathways",          cefr: "C1", vi: "lộ trình nghề nghiệp" },
+  { phrase: "Urban development",            cefr: "B2", vi: "phát triển đô thị" },
+  { phrase: "Resource allocation",          cefr: "C1", vi: "phân bổ nguồn lực" },
+  { phrase: "Health outcomes",              cefr: "B2", vi: "kết quả sức khỏe" },
+  { phrase: "Data-driven decision",         cefr: "C2", vi: "quyết định dựa trên dữ liệu" },
+  { phrase: "Mental well-being",            cefr: "B2", vi: "sức khỏe tinh thần" },
+  { phrase: "Health care system",           cefr: "B2", vi: "hệ thống chăm sóc sức khỏe" },
+  { phrase: "International cooperation",    cefr: "B2", vi: "hợp tác quốc tế" },
+  { phrase: "Workforce readiness",          cefr: "C1", vi: "sự sẵn sàng cho thị trường lao động" },
+  { phrase: "Practical solution",           cefr: "B2", vi: "giải pháp thiết thực" },
+  { phrase: "Sustainable development",      cefr: "B2", vi: "phát triển bền vững" },
+  { phrase: "Long-term strategy",           cefr: "B2", vi: "chiến lược dài hạn" },
+  { phrase: "Cost-effective approach",      cefr: "C1", vi: "cách tiếp cận tiết kiệm chi phí" },
+  { phrase: "Social mobility",              cefr: "C1", vi: "sự dịch chuyển xã hội" },
+  { phrase: "Equal opportunity",            cefr: "B2", vi: "cơ hội bình đẳng" },
+  { phrase: "Job market demand",            cefr: "B2", vi: "nhu cầu thị trường lao động" },
+  { phrase: "Economic growth",              cefr: "B2", vi: "tăng trưởng kinh tế" },
+  { phrase: "Access to education",          cefr: "B2", vi: "quyền tiếp cận giáo dục" },
+  { phrase: "Income disparity",             cefr: "C1", vi: "chênh lệch thu nhập" },
+  { phrase: "Labour productivity",          cefr: "C1", vi: "năng suất lao động" },
+  { phrase: "Youth unemployment",           cefr: "B2", vi: "thất nghiệp trong giới trẻ" },
+  { phrase: "Policy reform",                cefr: "C1", vi: "cải cách chính sách" },
+  { phrase: "Social inequality",            cefr: "B2", vi: "bất bình đẳng xã hội" },
+  { phrase: "Climate change mitigation",    cefr: "C1", vi: "giảm thiểu biến đổi khí hậu" },
+  { phrase: "Government intervention",      cefr: "B2", vi: "sự can thiệp của chính phủ" },
+  { phrase: "Civic responsibility",         cefr: "C1", vi: "trách nhiệm công dân" },
+  { phrase: "Digital literacy",             cefr: "B2", vi: "hiểu biết công nghệ" },
+  { phrase: "Academic performance",         cefr: "B2", vi: "thành tích học tập" },
+  { phrase: "Public funding",               cefr: "B2", vi: "ngân sách công" },
+];
+
+const examples = [
+  { en: "Introducing AI-powered tools in classrooms, which may pave the way for more personalized and effective learning experiences.",        vi: "Việc đưa công cụ AI vào lớp học có thể mở đường cho trải nghiệm học tập cá nhân hóa và hiệu quả hơn.",            hl: "pave the way for" },
+  { en: "Government investment in green technology has the potential to bring about long-term environmental sustainability.",                   vi: "Việc chính phủ đầu tư vào công nghệ xanh có khả năng mang lại sự bền vững môi trường lâu dài.",                  hl: "bring about" },
+  { en: "Free university education may serve as a catalyst for social mobility and economic growth.",                                           vi: "Việc miễn học phí đại học có thể là chất xúc tác cho sự dịch chuyển xã hội và tăng trưởng kinh tế.",              hl: "catalyst for" },
+  { en: "Investing in renewable energy, which facilitates a more sustainable and resilient infrastructure.",                                    vi: "Đầu tư vào năng lượng tái tạo giúp xây dựng hạ tầng bền vững và linh hoạt hơn.",                                  hl: "facilitates" },
+  { en: "Providing vocational training, which can serve as a springboard for immediate employment opportunities.",                              vi: "Đào tạo nghề có thể tạo bước đệm cho cơ hội việc làm ngay lập tức.",                                               hl: "springboard for" },
+  { en: "Adopting digital payment systems, which paves the way for greater financial inclusion.",                                               vi: "Áp dụng thanh toán số có thể mở đường cho khả năng tiếp cận tài chính rộng rãi hơn.",                              hl: "paves the way for" },
+  { en: "Enhancing public transport, which may culminate in reduced urban congestion and air pollution.",                                       vi: "Cải thiện giao thông công cộng có thể dẫn đến giảm tắc nghẽn và ô nhiễm không khí.",                               hl: "culminate in" },
+  { en: "Government subsidies for green tech, which act as a catalyst for long-term environmental reform.",                                     vi: "Trợ cấp chính phủ cho công nghệ xanh có thể là chất xúc tác cho cải cách môi trường lâu dài.",                     hl: "catalyst for" },
+  { en: "Offering free early childhood education, which empowers disadvantaged families and boosts lifelong learning outcomes.",                 vi: "Giáo dục mầm non miễn phí giúp gia đình khó khăn có cơ hội và nâng cao kết quả học tập lâu dài.",                  hl: "empowers" },
+  { en: "Integrating soft skills into curricula, which contributes to a more holistic and future-proof workforce.",                             vi: "Tích hợp kỹ năng mềm giúp xây dựng lực lượng lao động toàn diện và thích nghi cao.",                                hl: "contributes to" },
+  { en: "Promoting remote working policies, which offers a cost-effective and adaptable model for businesses.",                                 vi: "Thúc đẩy làm việc từ xa mang lại mô hình linh hoạt và tiết kiệm chi phí cho doanh nghiệp.",                         hl: "cost-effective" },
+  { en: "Expanding access to online courses, which holds promise for bridging educational inequality.",                                         vi: "Mở rộng khoá học online giúp thu hẹp bất bình đẳng trong giáo dục.",                                                hl: "holds promise for" },
+  { en: "Encouraging entrepreneurship among youth, which fosters innovation and drives economic growth.",                                       vi: "Khuyến khích khởi nghiệp ở giới trẻ giúp thúc đẩy đổi mới và tăng trưởng kinh tế.",                                hl: "fosters" },
+];
+
+// ──────────────────────────────────────────────
+//  HELPERS
+// ──────────────────────────────────────────────
+
+function cefrKey(c) {
+  const s = c.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+  if (s === 'b2')   return 'b-b2';
+  if (s === 'b2c1') return 'b-b2c1';
+  if (s === 'c1')   return 'b-c1';
+  if (s === 'c1c2') return 'b-c1c2';
+  if (s === 'c2')   return 'b-c2';
+  return 'b-c1';
+}
+
+function badge(cefr) {
+  return `<span class="badge ${cefrKey(cefr)}">${cefr}</span>`;
+}
+
+function cefrMatch(itemCefr) {
+  if (activeCefr === 'all') return true;
+  return itemCefr.includes(activeCefr);
+}
+
+function textMatch(fields, q) {
+  if (!q) return true;
+  return fields.some(f => f && f.toLowerCase().includes(q));
+}
+
+function escape(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// ──────────────────────────────────────────────
+//  STATE
+// ──────────────────────────────────────────────
+
+let activeCefr = 'all';
+let currentTab = 'phrases';
+
+// ──────────────────────────────────────────────
+//  STATS
+// ──────────────────────────────────────────────
+
+function renderStats() {
+  const total = phrases.length + nouns.length + verbs.length + adjectives.length + topics.length;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><strong>${phrases.length}</strong>outcome phrases</div>
+    <div class="stat"><strong>${nouns.length}</strong>noun phrases</div>
+    <div class="stat"><strong>${verbs.length}</strong>verbs</div>
+    <div class="stat"><strong>${adjectives.length}</strong>adjectives</div>
+    <div class="stat"><strong>${topics.length}</strong>key topics</div>
+    <div class="stat"><strong>${total}</strong>total items</div>
+  `;
+}
+
+// ──────────────────────────────────────────────
+//  CEFR FILTERS
+// ──────────────────────────────────────────────
+
+function renderCefrFilters() {
+  const el = document.getElementById('cefrFilters');
+  ['all', 'B2', 'C1', 'C2'].forEach(lvl => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn' + (activeCefr === lvl ? ' active' : '');
+    btn.dataset.cefr = lvl;
+    btn.textContent = lvl === 'all' ? 'All levels' : lvl;
+    btn.addEventListener('click', () => { activeCefr = lvl; renderCefrFilters(); render(); });
+    el.appendChild(btn);
+  });
+}
+
+function refreshCefrFilters() {
+  document.getElementById('cefrFilters').innerHTML = '';
+  renderCefrFilters();
+}
+
+// ──────────────────────────────────────────────
+//  RENDER SECTIONS
+// ──────────────────────────────────────────────
+
+function renderPhrases() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const filtered = phrases.filter(p => cefrMatch(p.cefr) && textMatch([p.phrase, p.vi, p.note], q));
+  const el = document.getElementById('phrases-grid');
+  if (!filtered.length) { el.innerHTML = '<div class="empty">No phrases match your search.</div>'; return; }
+  el.innerHTML = filtered.map(p => `
+    <div class="card">
+      <div class="card-top">
+        <div class="card-phrase">${p.phrase}</div>
+        ${badge(p.cefr)}
+      </div>
+      <div class="card-vi">${p.vi}</div>
+      ${p.note ? `<div class="card-note">${p.note}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderNouns() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const filtered = nouns.filter(n => cefrMatch(n.cefr) && textMatch([n.phrase, n.vi, n.example], q));
+  const el = document.getElementById('nouns-grid');
+  if (!filtered.length) { el.innerHTML = '<div class="empty">No phrases match your search.</div>'; return; }
+  el.innerHTML = filtered.map(n => `
+    <div class="card">
+      <div class="card-top">
+        <div class="card-phrase">${n.phrase}</div>
+        ${badge(n.cefr)}
+      </div>
+      <div class="card-vi">${n.vi}</div>
+      <div class="card-example">"${n.example}"</div>
+    </div>
+  `).join('');
+}
+
+function renderCompact(data, gridId) {
+  const q = document.getElementById('search').value.toLowerCase();
+  const filtered = data.filter(d => cefrMatch(d.cefr) && textMatch([d.word || d.phrase, d.vi], q));
+  const el = document.getElementById(gridId);
+  if (!filtered.length) { el.innerHTML = '<div class="empty">No items match your search.</div>'; return; }
+  el.innerHTML = filtered.map(d => `
+    <div class="word-card">
+      <div class="word-card-top">
+        <span class="wrd">${d.word || d.phrase}</span>
+        ${badge(d.cefr)}
+      </div>
+      <span class="vi">${d.vi}</span>
+    </div>
+  `).join('');
+}
+
+function renderExamples() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const filtered = examples.filter(e => textMatch([e.en, e.vi], q));
+  const el = document.getElementById('examples-list');
+  if (!filtered.length) { el.innerHTML = '<div class="empty">No examples match your search.</div>'; return; }
+  el.innerHTML = filtered.map(e => {
+    const highlighted = e.en.replace(
+      new RegExp(escape(e.hl), 'gi'),
+      m => `<mark>${m}</mark>`
+    );
+    return `
+      <div class="ex-card">
+        <div class="ex-en">${highlighted}</div>
+        <div class="ex-vi">→ ${e.vi}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ──────────────────────────────────────────────
+//  MASTER RENDER
+// ──────────────────────────────────────────────
+
+function render() {
+  switch (currentTab) {
+    case 'phrases':    renderPhrases(); break;
+    case 'nouns':      renderNouns(); break;
+    case 'verbs':      renderCompact(verbs, 'verbs-grid'); break;
+    case 'adjectives': renderCompact(adjectives, 'adjectives-grid'); break;
+    case 'topics':     renderCompact(topics, 'topics-grid'); break;
+    case 'examples':   renderExamples(); break;
+  }
+}
+
+// ──────────────────────────────────────────────
+//  TAB SWITCHING
+// ──────────────────────────────────────────────
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === 'tab-' + tab));
+  // hide CEFR filter on examples tab (no CEFR levels there)
+  document.getElementById('cefrFilters').style.display = tab === 'examples' ? 'none' : 'flex';
+  render();
+}
+
+// ──────────────────────────────────────────────
+//  INIT
+// ──────────────────────────────────────────────
+
+renderStats();
+renderCefrFilters();
+render();
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+
+document.getElementById('search').addEventListener('input', render);
+</script>
+</body>
+</html>

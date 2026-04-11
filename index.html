@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>English Vocabulary — Software Dev & AI</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3350;
+      --accent: #6c8ef7;
+      --accent2: #a78bfa;
+      --text: #e2e6f0;
+      --muted: #8b92b3;
+      --b2: #34d399;
+      --c1: #f59e0b;
+      --noun: #60a5fa;
+      --verb: #f472b6;
+      --phrase: #a78bfa;
+      --adj: #fb923c;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+
+    /* ── Header ── */
+    header {
+      max-width: 1100px;
+      margin: 0 auto 2.5rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: .4rem;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    /* ── Stats bar ── */
+    .stats {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 1100px;
+      margin: 0 auto 2rem;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .6rem 1.2rem;
+      font-size: .85rem;
+      color: var(--muted);
+    }
+
+    .stat strong { color: var(--text); font-size: 1.1rem; display: block; }
+
+    /* ── Controls ── */
+    .controls {
+      max-width: 1100px;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-wrap {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: .75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    input[type="search"] {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: .55rem .75rem .55rem 2.3rem;
+      font-size: .9rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    input[type="search"]:focus { border-color: var(--accent); }
+    input[type="search"]::placeholder { color: var(--muted); }
+
+    .filters { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+    .filter-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 20px;
+      padding: .4rem .9rem;
+      font-size: .8rem;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .filter-btn:hover { border-color: var(--accent); color: var(--text); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* ── Grid ── */
+    .grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1rem;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+      transition: border-color .2s, transform .15s;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: .5rem;
+    }
+
+    .word {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .badges { display: flex; gap: .35rem; flex-shrink: 0; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+
+    .badge {
+      font-size: .7rem;
+      font-weight: 600;
+      padding: .2rem .55rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+
+    .badge-cefr-b2 { background: rgba(52,211,153,.15); color: var(--b2); border: 1px solid rgba(52,211,153,.3); }
+    .badge-cefr-c1 { background: rgba(245,158,11,.15); color: var(--c1); border: 1px solid rgba(245,158,11,.3); }
+
+    .badge-type-noun          { background: rgba(96,165,250,.12); color: var(--noun); border: 1px solid rgba(96,165,250,.25); }
+    .badge-type-verb          { background: rgba(244,114,182,.12); color: var(--verb); border: 1px solid rgba(244,114,182,.25); }
+    .badge-type-phrase        { background: rgba(167,139,250,.12); color: var(--phrase); border: 1px solid rgba(167,139,250,.25); }
+    .badge-type-adjective     { background: rgba(251,146,60,.12);  color: var(--adj);   border: 1px solid rgba(251,146,60,.25); }
+    .badge-type-phrasal-verb  { background: rgba(244,114,182,.12); color: var(--verb); border: 1px solid rgba(244,114,182,.25); }
+    .badge-type-noun-phrase   { background: rgba(96,165,250,.12); color: var(--noun); border: 1px solid rgba(96,165,250,.25); }
+
+    .meaning {
+      font-size: .875rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .synonyms {
+      font-size: .78rem;
+      color: var(--muted);
+    }
+
+    .synonyms span { color: var(--accent2); }
+
+    .example {
+      font-size: .82rem;
+      color: var(--muted);
+      font-style: italic;
+      background: var(--surface2);
+      border-left: 3px solid var(--accent);
+      padding: .5rem .75rem;
+      border-radius: 0 6px 6px 0;
+      line-height: 1.5;
+    }
+
+    /* ── Empty state ── */
+    .empty {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 3rem;
+      color: var(--muted);
+    }
+
+    /* ── Session log ── */
+    .log-section {
+      max-width: 1100px;
+      margin: 3rem auto 0;
+    }
+
+    .log-section h2 {
+      font-size: 1.1rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+
+    table.log {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .85rem;
+    }
+
+    table.log th {
+      text-align: left;
+      color: var(--muted);
+      font-weight: 500;
+      padding: .4rem .75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    table.log td {
+      padding: .6rem .75rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    table.log tr:last-child td { border-bottom: none; }
+    table.log tr:hover td { background: var(--surface); }
+
+    @media (max-width: 500px) {
+      header h1 { font-size: 1.5rem; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>English Vocabulary</h1>
+  <p>Software Development &amp; AI — tracked words and phrases</p>
+</header>
+
+<div class="stats" id="stats"></div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="search" id="search" placeholder="Search words, meanings, examples…" />
+  </div>
+  <div class="filters" id="filters"></div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="log-section">
+  <h2>Session Log</h2>
+  <table class="log">
+    <thead>
+      <tr><th>Date</th><th>Words Practiced</th><th>New Words Added</th></tr>
+    </thead>
+    <tbody id="log-body"></tbody>
+  </table>
+</div>
+
+<script>
+const vocab = [
+  { id:1,  word:"competency",                    type:"noun",         cefr:"B2", meaning:"The ability to do something successfully or efficiently.", synonyms:"capability, ability, skill, aptitude",                                                   example:"The job listing requires competency in Python and cloud infrastructure." },
+  { id:2,  word:"proficiency",                   type:"noun",         cefr:"C1", meaning:"A high degree of skill or expertise, especially from practice.", synonyms:"mastery, fluency, competence, skillfulness",                                          example:"She demonstrated proficiency in machine learning by deploying the model in under a day." },
+  { id:3,  word:"technical expertise",           type:"noun phrase",  cefr:"C1", meaning:"Deep, specialized knowledge in a technical field.", synonyms:"domain knowledge, specialist knowledge, technical mastery",                                      example:"The team hired a contractor with technical expertise in distributed systems." },
+  { id:4,  word:"it seems to me",                type:"phrase",       cefr:"B2", meaning:"Used to introduce a personal opinion or observation.", synonyms:"in my opinion, from my perspective, I believe, as far as I can tell",                          example:"It seems to me that this architecture will create a bottleneck at scale." },
+  { id:5,  word:"scalability",                   type:"noun",         cefr:"C1", meaning:"The ability of a system to handle growing amounts of work or be enlarged to accommodate growth.", synonyms:"elasticity, expandability, growth capacity",       example:"The team chose Kubernetes because of its scalability — it can handle thousands of containers as traffic grows." },
+  { id:6,  word:"prioritise",                    type:"verb",         cefr:"B2", meaning:"To decide which tasks or problems are most important and deal with them first.", synonyms:"rank, order, focus on, put first",                                   example:"We need to prioritise fixing the security vulnerability before shipping the new feature." },
+  { id:7,  word:"manage to",                     type:"phrasal verb", cefr:"B2", meaning:"To succeed in doing something, especially something difficult.", synonyms:"succeed in, accomplish, achieve, pull off",                                         example:"After two days of debugging, she managed to track down the memory leak." },
+  { id:8,  word:"make it",                       type:"phrase",       cefr:"B2", meaning:"To succeed in reaching a goal or position; to attend something.", synonyms:"succeed, get there, pull through",                                                example:"Not everyone who starts a bootcamp makes it to the final project — it requires real dedication." },
+  { id:9,  word:"mastering (a skill)",           type:"verb",         cefr:"C1", meaning:"Achieving a very high level of skill or understanding through sustained effort.", synonyms:"learning thoroughly, becoming fluent in, conquering",               example:"Mastering programming languages takes years of consistent practice and real-world projects." },
+  { id:10, word:"centralize",                    type:"verb",         cefr:"B2", meaning:"To bring things under a single central system or point of control.", synonyms:"consolidate, unify, concentrate, bring together",                              example:"We decided to centralize all our logging data in one platform to make debugging easier." },
+  { id:11, word:"consolidation",                 type:"noun",         cefr:"C1", meaning:"The process of combining several things into a single more effective whole.", synonyms:"merging, unification, integration, streamlining",                      example:"The consolidation of our microservices into a shared library reduced code duplication significantly." },
+  { id:12, word:"eligible",                      type:"adjective",    cefr:"B2", meaning:"Meeting the required conditions to do or receive something.", synonyms:"qualified, suitable, entitled, permitted",                                            example:"Only engineers who have completed the security training are eligible to access the production environment." },
+  { id:13, word:"place a strong emphasis on",    type:"phrase",       cefr:"C1", meaning:"To give particular importance or attention to something.", synonyms:"prioritise, focus heavily on, stress, highlight",                                        example:"Our engineering culture places a strong emphasis on code reviews and knowledge sharing." },
+  { id:14, word:"collaborative working environment", type:"noun phrase", cefr:"C1", meaning:"A workplace where people actively work together, share knowledge, and support each other.", synonyms:"team-oriented culture, cooperative setting",        example:"A collaborative working environment helps junior developers grow faster through peer learning." },
+  { id:15, word:"professional advancement",      type:"noun phrase",  cefr:"C1", meaning:"Progress and growth in one's career, skills, or status.", synonyms:"career growth, career progression, upward mobility",                                    example:"He joined the company because it offered clear paths for professional advancement in the AI field." },
+  { id:16, word:"extensive collaboration",       type:"noun phrase",  cefr:"C1", meaning:"Working closely and frequently with a wide range of people or teams.", synonyms:"broad teamwork, cross-team cooperation",                                     example:"The project required extensive collaboration between the frontend, backend, and DevOps teams." },
+  { id:17, word:"coordinate with team members",  type:"phrase",       cefr:"B2", meaning:"To organise and align efforts with colleagues to work effectively together.", synonyms:"sync with, align with, work alongside",                               example:"Before starting the sprint, make sure to coordinate with team members on task dependencies." },
+  { id:18, word:"well-rounded software engineer",type:"noun phrase",  cefr:"C1", meaning:"A developer with a broad mix of technical and soft skills across multiple areas.", synonyms:"versatile engineer, full-spectrum developer",                    example:"Being a well-rounded software engineer means you can write code, communicate clearly, and understand business needs." },
+  { id:19, word:"stakeholder",                   type:"noun",         cefr:"C1", meaning:"A person or group with an interest in or affected by a project or business decision.", synonyms:"interested party, decision-maker, sponsor, client",           example:"We scheduled a demo to keep stakeholders informed about the progress of the new AI feature." },
+  { id:20, word:"iterate",                       type:"verb",         cefr:"B2", meaning:"To repeat a process, making improvements each time based on feedback or results.", synonyms:"refine, improve progressively, cycle through",                   example:"We iterate on the design based on user feedback until the experience feels right." },
+  { id:21, word:"bottleneck",                    type:"noun",         cefr:"C1", meaning:"A point in a system where flow is restricted, causing slowdowns for the whole process.", synonyms:"choke point, constraint, limiting factor",                  example:"The database query is a bottleneck slowing down the entire pipeline." },
+  { id:22, word:"leverage",                      type:"verb",         cefr:"C1", meaning:"To use something to its maximum advantage, especially an existing resource or tool.", synonyms:"utilise, capitalise on, take advantage of",                   example:"We can leverage the existing API instead of building the integration from scratch." },
+  { id:23, word:"trade-off",                     type:"noun",         cefr:"C1", meaning:"A balance between two competing things where gaining one means losing some of the other.", synonyms:"compromise, balancing act, give-and-take",               example:"There's a trade-off between performance and readability here — we need to decide what matters more." },
+  { id:24, word:"hands-on experience",           type:"noun phrase",  cefr:"B2", meaning:"Practical experience gained by directly doing something rather than just studying it.", synonyms:"practical experience, real-world experience, applied experience", example:"She has hands-on experience deploying ML models in production environments." },
+  { id:25, word:"take ownership of",             type:"phrase",       cefr:"C1", meaning:"To accept full responsibility for something and see it through from start to finish.", synonyms:"be accountable for, own, be responsible for",                example:"Each engineer is expected to take ownership of their services end-to-end." },
+  { id:26, word:"proof of concept",              type:"noun phrase",  cefr:"C1", meaning:"A small-scale test or prototype to demonstrate that an idea or approach is feasible.", synonyms:"prototype, pilot, feasibility test, PoC",                  example:"Let's build a proof of concept before committing to this architecture." },
+  { id:27, word:"align with",                    type:"phrasal verb", cefr:"B2", meaning:"To be consistent with or match something, such as a goal, strategy, or standard.", synonyms:"match, fit, be consistent with, support",                       example:"This solution aligns with our long-term technical roadmap." },
+  { id:28, word:"cross-functional",              type:"adjective",    cefr:"C1", meaning:"Involving people with different specialisations working together toward a shared goal.", synonyms:"multidisciplinary, diverse, cross-team",                    example:"A cross-functional team includes developers, designers, and product managers." },
+  { id:29, word:"scalable solution",             type:"noun phrase",  cefr:"C1", meaning:"An approach or system that can grow and handle increased demand without breaking down.", synonyms:"flexible architecture, growth-ready system",               example:"We need a scalable solution that can support 10x growth in traffic." },
+  { id:30, word:"under the hood",                type:"phrase",       cefr:"C1", meaning:"Referring to the internal workings of a system, hidden from the end user.", synonyms:"internally, behind the scenes, at the technical level",                example:"Under the hood, the model uses a transformer architecture to process language." },
+];
+
+const sessions = [
+  { date:"2026-04-11", practiced:"competency, proficiency, technical expertise, it seems to me", added:"(first session)" },
+  { date:"2026-04-11", practiced:"competency, proficiency, technical expertise, it seems to me", added:"scalability" },
+  { date:"2026-04-11", practiced:"—", added:"prioritise, manage to, make it, mastering (a skill)" },
+  { date:"2026-04-11", practiced:"—", added:"centralize, consolidation, eligible, place a strong emphasis on, collaborative working environment, professional advancement, extensive collaboration, coordinate with team members, well-rounded software engineer, stakeholder" },
+];
+
+// ── type → CSS class key ──
+function typeKey(t) {
+  return t.toLowerCase().replace(/[^a-z]+/g, '-');
+}
+
+// ── Render stats ──
+function renderStats() {
+  const b2 = vocab.filter(v => v.cefr === 'B2').length;
+  const c1 = vocab.filter(v => v.cefr === 'C1').length;
+  const types = [...new Set(vocab.map(v => v.type))].length;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><strong>${vocab.length}</strong>total words</div>
+    <div class="stat"><strong style="color:var(--b2)">${b2}</strong>B2 level</div>
+    <div class="stat"><strong style="color:var(--c1)">${c1}</strong>C1 level</div>
+    <div class="stat"><strong>${types}</strong>word types</div>
+  `;
+}
+
+// ── Render filter buttons ──
+let activeFilter = 'all';
+function renderFilters() {
+  const types = ['all', ...new Set(vocab.map(v => v.type))];
+  document.getElementById('filters').innerHTML = types.map(t => `
+    <button class="filter-btn${t === activeFilter ? ' active' : ''}" data-type="${t}">
+      ${t === 'all' ? 'All' : t}
+    </button>
+  `).join('');
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeFilter = btn.dataset.type;
+      renderFilters();
+      render();
+    });
+  });
+}
+
+// ── Render cards ──
+function render() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const filtered = vocab.filter(v => {
+    const matchType = activeFilter === 'all' || v.type === activeFilter;
+    const matchQ = !q || [v.word, v.meaning, v.synonyms, v.example].some(s => s.toLowerCase().includes(q));
+    return matchType && matchQ;
+  });
+
+  const grid = document.getElementById('grid');
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="empty">No words match your search.</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(v => `
+    <div class="card">
+      <div class="card-top">
+        <div class="word">${v.id}. ${v.word}</div>
+        <div class="badges">
+          <span class="badge badge-cefr-${v.cefr.toLowerCase()}">${v.cefr}</span>
+          <span class="badge badge-type-${typeKey(v.type)}">${v.type}</span>
+        </div>
+      </div>
+      <div class="meaning">${v.meaning}</div>
+      <div class="synonyms"><span>Also:</span> ${v.synonyms}</div>
+      <div class="example">"${v.example}"</div>
+    </div>
+  `).join('');
+}
+
+// ── Render session log ──
+function renderLog() {
+  document.getElementById('log-body').innerHTML = sessions.map(s => `
+    <tr>
+      <td>${s.date}</td>
+      <td>${s.practiced}</td>
+      <td>${s.added}</td>
+    </tr>
+  `).join('');
+}
+
+// ── Init ──
+renderStats();
+renderFilters();
+render();
+renderLog();
+
+document.getElementById('search').addEventListener('input', render);
+</script>
+</body>
+</html>
