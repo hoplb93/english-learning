@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lexis — Progress Charts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Courier+Prime:ital,wght@0,400;0,700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:          #080d18;
+      --bg2:         #0e1525;
+      --bg3:         #141c30;
+      --line:        #1c2640;
+      --parchment:   #ede4d0;
+      --parchment-dim: #b8aa90;
+      --teal:        #4ec9d4;
+      --teal-dim:    #215a62;
+      --orange:      #e07a3a;
+      --orange-dim:  #7a3a14;
+      --gold:        #c8a23a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 44px 44px;
+      color: var(--parchment);
+      font-family: 'EB Garamond', Georgia, serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 44px 24px 80px;
+    }
+
+    /* ── Header ─────────────────────────────── */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 56px;
+    }
+
+    .brand {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--teal);
+    }
+
+    .header-meta {
+      text-align: right;
+    }
+    .date-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 12px;
+      color: var(--parchment-dim);
+      letter-spacing: 0.1em;
+    }
+    .streak {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 5px 16px;
+      border: 1px solid var(--orange-dim);
+      color: var(--orange);
+      font-family: 'Courier Prime', monospace;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+    }
+
+    /* ── Layout helpers ──────────────────────── */
+    .gap2 { display: flex; flex-direction: column; gap: 2px; }
+    .row  { display: grid; gap: 2px; }
+    .row-2-1   { grid-template-columns: 2fr 1fr; }
+    .row-1-1   { grid-template-columns: 1fr 1fr; }
+    .row-equal { grid-template-columns: 1fr 1fr; }
+
+    .panel {
+      background: var(--bg2);
+      padding: 38px 40px;
+      position: relative;
+      animation: fadeUp 0.55s ease both;
+      opacity: 0;
+    }
+
+    /* stagger each panel */
+    .panel:nth-child(1) { animation-delay: 0.08s; }
+    .panel:nth-child(2) { animation-delay: 0.16s; }
+    .panel:nth-child(3) { animation-delay: 0.24s; }
+    .panel:nth-child(4) { animation-delay: 0.32s; }
+    .panel:nth-child(5) { animation-delay: 0.40s; }
+    .panel:nth-child(6) { animation-delay: 0.48s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Corner decorations ──────────────────── */
+    .c { position: absolute; width: 18px; height: 18px; }
+    .c.tl { top: 12px; left: 12px;  border-top:    1px solid var(--teal-dim); border-left:   1px solid var(--teal-dim); }
+    .c.tr { top: 12px; right: 12px; border-top:    1px solid var(--teal-dim); border-right:  1px solid var(--teal-dim); }
+    .c.bl { bottom: 12px; left: 12px;  border-bottom: 1px solid var(--teal-dim); border-left: 1px solid var(--teal-dim); }
+    .c.br { bottom: 12px; right: 12px; border-bottom: 1px solid var(--teal-dim); border-right: 1px solid var(--teal-dim); }
+
+    /* ── Section labels ──────────────────────── */
+    .sec-label {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      color: var(--parchment-dim);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .sec-label::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+    /* ── Hero big number ─────────────────────── */
+    .big-num {
+      font-family: 'Cinzel', serif;
+      font-size: 80px;
+      font-weight: 900;
+      line-height: 1;
+      color: #f0ece0;
+      letter-spacing: -0.02em;
+    }
+    .big-num-unit {
+      font-family: 'Cinzel', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--teal);
+      vertical-align: top;
+      margin-top: 14px;
+      display: inline-block;
+      margin-left: 4px;
+    }
+    .sub-note {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 17px;
+      color: var(--parchment-dim);
+      margin-top: 12px;
+    }
+
+    /* ── Ring stat panel ─────────────────────── */
+    .ring-panel {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+    .ring-wrap { position: relative; flex-shrink: 0; }
+    .ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .ring-pct {
+      font-family: 'Courier Prime', monospace;
+      font-weight: 700;
+      font-size: 26px;
+      color: #f0ece0;
+      line-height: 1;
+    }
+    .ring-pct small { font-size: 13px; }
+    .ring-sublabel {
+      font-family: 'Courier Prime', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--parchment-dim);
+      margin-top: 3px;
+    }
+
+    .progress-ring-fill {
+      stroke-dasharray: 326.73;
+      stroke-dashoffset: 326.73;
+      transition: stroke-dashoffset 0s;
+    }
+    .progress-ring-fill.animate {
+      transition: stroke-dashoffset 1.9s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .meta-list {
+      font-family: 'Courier Prime', monospace;
+      font-size: 13px;
+      color: var(--parchment-dim);
+      line-height: 2.2;
+    }
+    .meta-list span { float: right; }
+    .meta-list span.hi { color: var(--teal); font-weight: 700; }
+    .meta-list span.lo { color: #f0ece0; }
+
+    /* ── Line chart ──────────────────────────── */
+    .chart-wrap { position: relative; padding-left: 34px; }
+    .y-labels {
+      position: absolute;
+      left: 0; top: 0; bottom: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-family: 'Courier Prime', monospace;
+      font-size: 11px;
+      color: var(--parchment-dim);
+      text-align: right;
+      width: 28px;
+    }
+    .svg-line { width: 100%; overflow: visible; }
+
+    .chart-path-line {
+      stroke-dasharray: 1200;
+      stroke-dashoffset: 1200;
+      animation: drawLine 2.2s ease 0.9s forwards;
+    }
+    .chart-path-area {
+      opacity: 0;
+      animation: fadeIn 1s ease 1.8s forwards;
+    }
+    @keyframes drawLine { to { stroke-dashoffset: 0; } }
+    @keyframes fadeIn   { to { opacity: 1; } }
+
+    /* ── Weekly bars ─────────────────────────── */
+    .bars { display: flex; flex-direction: column; gap: 18px; }
+    .bar-row {
+      display: grid;
+      grid-template-columns: 46px 1fr 28px;
+      align-items: center;
+      gap: 12px;
+    }
+    .bar-lbl {
+      font-family: 'Courier Prime', monospace;
+      font-size: 12px;
+      color: var(--parchment-dim);
+      text-align: right;
+    }
+    .bar-track { height: 5px; background: var(--line); border-radius: 2px; }
+    .bar-fill  { height: 100%; width: 0; border-radius: 2px; transition: width 1.5s cubic-bezier(0.25, 1, 0.5, 1); }
+    .bar-val {
+      font-family: 'Courier Prime', monospace;
+      font-size: 12px;
+      color: var(--parchment);
+    }
+    .divider { height: 1px; background: var(--line); margin: 24px 0; }
+
+    /* ── Heatmap ──────────────────────────────── */
+    .heatmap-outer { display: flex; gap: 8px; align-items: flex-start; }
+    .heatmap-day-labels {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding-top: 20px; /* align with first cell row, below month labels */
+      flex-shrink: 0;
+    }
+    .day-lbl {
+      font-family: 'Courier Prime', monospace;
+      font-size: 11px;
+      color: var(--parchment-dim);
+      line-height: 1;
+      height: 14px;
+      display: flex;
+      align-items: center;
+    }
+    .heatmap-right { flex: 1; min-width: 0; }
+    .month-labels {
+      display: grid;
+      grid-template-columns: repeat(13, 1fr);
+      gap: 3px;
+      margin-bottom: 6px;
+    }
+    .m-lbl {
+      font-family: 'Courier Prime', monospace;
+      font-size: 10px;
+      color: var(--parchment-dim);
+      text-align: center;
+    }
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: repeat(13, 1fr);
+      gap: 3px;
+    }
+    .hmap-week { display: flex; flex-direction: column; gap: 3px; }
+    .hmap-cell {
+      aspect-ratio: 1;
+      border: 1px solid transparent;
+      transition: transform 0.15s, box-shadow 0.15s;
+      cursor: default;
+    }
+    .hmap-cell:hover { transform: scale(1.4); z-index: 10; position: relative; box-shadow: 0 0 6px rgba(78,201,212,0.4); }
+    .hmap-cell[data-v="0"] { background: var(--bg3); border-color: var(--line); }
+    .hmap-cell[data-v="1"] { background: #163f48; border-color: #215866; }
+    .hmap-cell[data-v="2"] { background: #1e6070; border-color: #2e8090; }
+    .hmap-cell[data-v="3"] { background: #248490; border-color: #36a4b0; }
+    .hmap-cell[data-v="4"] { background: var(--teal); border-color: #7adfe8; }
+
+    .heatmap-legend {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: flex-end;
+      margin-top: 14px;
+      font-family: 'Courier Prime', monospace;
+      font-size: 11px;
+      color: var(--parchment-dim);
+    }
+    .leg-cell { width: 10px; height: 10px; border: 1px solid; }
+
+    /* ── Category bars ────────────────────────── */
+    .cat-list { display: flex; flex-direction: column; gap: 22px; }
+    .cat-item-hd {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+    .cat-name {
+      font-family: 'EB Garamond', serif;
+      font-size: 18px;
+      color: var(--parchment);
+    }
+    .cat-count {
+      font-family: 'Courier Prime', monospace;
+      font-size: 12px;
+      color: var(--parchment-dim);
+    }
+    .cat-track { height: 5px; background: var(--line); border-radius: 2px; }
+    .cat-fill  { height: 100%; width: 0; border-radius: 2px; transition: width 1.9s cubic-bezier(0.25, 1, 0.5, 1); }
+
+    /* ── Mastery panel ────────────────────────── */
+    .mastery-list { display: flex; flex-direction: column; gap: 18px; }
+    .mastery-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mastery-label {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--parchment-dim);
+    }
+    .mastery-sub {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--parchment-dim);
+      margin-top: 3px;
+    }
+    .mastery-num {
+      font-family: 'Cinzel', serif;
+      font-size: 40px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    /* back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Courier Prime', monospace;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      color: var(--parchment-dim);
+      text-decoration: none;
+      margin-bottom: 40px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--teal); }
+    .back-link::before { content: '←'; font-size: 12px; }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <a href="index.html" class="back-link">VOCABULARY LIST</a>
+
+  <!-- ── Header ── -->
+  <header>
+    <div class="brand">Lexis · Progress Charts</div>
+    <div class="header-meta">
+      <div class="date-label">APRIL 2026 · WEEK 15</div>
+      <div class="streak">◆ 14-DAY STREAK</div>
+    </div>
+  </header>
+
+  <!-- ── Row 1: Big stat + Ring stat ── -->
+  <div class="gap2">
+    <div class="row row-1-1">
+
+      <!-- Words charted -->
+      <div class="panel">
+        <div class="c tl"></div><div class="c br"></div>
+        <div class="sec-label">Vocabulary Charted</div>
+        <div class="big-num">
+          <span id="word-counter">0</span><span class="big-num-unit">words</span>
+        </div>
+        <div class="sub-note">of 200 target · English for Technology & AI</div>
+      </div>
+
+      <!-- Monthly goal ring -->
+      <div class="panel ring-panel">
+        <div class="c tr"></div><div class="c bl"></div>
+
+        <div class="ring-wrap">
+          <svg width="128" height="128" viewBox="0 0 128 128">
+            <circle cx="64" cy="64" r="52" fill="none" stroke="#1c2640" stroke-width="3.5"/>
+            <circle cx="64" cy="64" r="44" fill="none" stroke="#1c2640" stroke-width="0.5" stroke-dasharray="3 5"/>
+            <circle
+              id="ring-arc"
+              class="progress-ring-fill"
+              cx="64" cy="64" r="52"
+              fill="none"
+              stroke="var(--teal)"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              transform="rotate(-90 64 64)"
+            />
+          </svg>
+          <div class="ring-center">
+            <div class="ring-pct">62<small>%</small></div>
+            <div class="ring-sublabel">MONTHLY</div>
+          </div>
+        </div>
+
+        <div style="flex:1; min-width:0;">
+          <div class="sec-label" style="margin-bottom:16px;">Monthly Goal</div>
+          <div style="font-family:'Cinzel',serif; font-size:48px; font-weight:900; line-height:1; color:#f0ece0;">
+            31 <span style="font-size:18px; font-weight:400; color:var(--teal);">/ 50</span>
+          </div>
+          <div class="sub-note" style="margin-bottom:20px;">words this month</div>
+          <div class="meta-list">
+            <div>Sessions completed <span class="lo">12</span></div>
+            <div>Avg words / session <span class="lo">3.2</span></div>
+            <div>Best single day <span class="hi">7 words</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Row 2: Line chart + Weekly bars ── -->
+    <div class="row row-2-1">
+
+      <!-- Cumulative line chart -->
+      <div class="panel">
+        <div class="c tl"></div>
+        <div class="sec-label">Cumulative Words · 13-Week Journey</div>
+        <div class="chart-wrap">
+          <div class="y-labels">
+            <span>50</span><span>40</span><span>30</span><span>20</span><span>10</span><span>0</span>
+          </div>
+          <svg class="svg-line" viewBox="0 0 520 190" height="190" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="aGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stop-color="#4ec9d4" stop-opacity="0.18"/>
+                <stop offset="100%" stop-color="#4ec9d4" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <!-- Grid lines -->
+            <line x1="0" y1="0"   x2="520" y2="0"   stroke="#1c2640" stroke-width="1"/>
+            <line x1="0" y1="38"  x2="520" y2="38"  stroke="#1c2640" stroke-width="1"/>
+            <line x1="0" y1="76"  x2="520" y2="76"  stroke="#1c2640" stroke-width="1"/>
+            <line x1="0" y1="114" x2="520" y2="114" stroke="#1c2640" stroke-width="1"/>
+            <line x1="0" y1="152" x2="520" y2="152" stroke="#1c2640" stroke-width="1"/>
+            <line x1="0" y1="190" x2="520" y2="190" stroke="#1c2640" stroke-width="1"/>
+            <!-- Area -->
+            <!-- Data: 0,3,5,8,10,13,15,20,21,23,26,28,31 → y = 190-(v*3.8) -->
+            <!-- x step = 520/12 = 43.33 -->
+            <path class="chart-path-area"
+              d="M0,190 L43,178.6 L87,171 L130,159.6 L173,152 L217,140.6 L260,133 L303,114 L347,110.2 L390,102.6 L433,91.2 L477,83.6 L520,72.2 L520,190 Z"
+              fill="url(#aGrad)"
+            />
+            <!-- Line -->
+            <path class="chart-path-line"
+              d="M0,190 L43,178.6 L87,171 L130,159.6 L173,152 L217,140.6 L260,133 L303,114 L347,110.2 L390,102.6 L433,91.2 L477,83.6 L520,72.2"
+              fill="none" stroke="var(--teal)" stroke-width="2" stroke-linejoin="round"
+            />
+            <!-- End dot -->
+            <circle cx="520" cy="72.2" r="4" fill="var(--teal)"/>
+            <circle cx="520" cy="72.2" r="9" fill="none" stroke="var(--teal)" stroke-width="1" opacity="0.4"/>
+            <!-- X labels -->
+            <text x="0"   y="207" font-family="Courier Prime,monospace" font-size="11" fill="#b8aa90" text-anchor="middle">W1</text>
+            <text x="87"  y="207" font-family="Courier Prime,monospace" font-size="11" fill="#b8aa90" text-anchor="middle">W3</text>
+            <text x="173" y="207" font-family="Courier Prime,monospace" font-size="11" fill="#b8aa90" text-anchor="middle">W5</text>
+            <text x="260" y="207" font-family="Courier Prime,monospace" font-size="11" fill="#b8aa90" text-anchor="middle">W7</text>
+            <text x="347" y="207" font-family="Courier Prime,monospace" font-size="11" fill="#b8aa90" text-anchor="middle">W9</text>
+            <text x="433" y="207" font-family="Courier Prime,monospace" font-size="11" fill="#b8aa90" text-anchor="middle">W11</text>
+            <text x="520" y="207" font-family="Courier Prime,monospace" font-size="11" fill="#4ec9d4" text-anchor="middle">W13</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Weekly bar chart -->
+      <div class="panel">
+        <div class="c tr"></div>
+        <div class="sec-label">This Week</div>
+        <div class="bars" id="bar-container">
+          <div class="bar-row">
+            <div class="bar-lbl">MON</div>
+            <div class="bar-track"><div class="bar-fill" style="background:var(--teal);" data-w="80"></div></div>
+            <div class="bar-val">4</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-lbl">TUE</div>
+            <div class="bar-track"><div class="bar-fill" style="background:var(--orange);" data-w="60"></div></div>
+            <div class="bar-val">3</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-lbl">WED</div>
+            <div class="bar-track"><div class="bar-fill" style="background:var(--teal);" data-w="100"></div></div>
+            <div class="bar-val">5</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-lbl">THU</div>
+            <div class="bar-track"><div class="bar-fill" style="background:var(--gold);" data-w="40"></div></div>
+            <div class="bar-val">2</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-lbl">FRI</div>
+            <div class="bar-track"><div class="bar-fill" style="background:var(--teal);" data-w="60"></div></div>
+            <div class="bar-val">3</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-lbl">SAT</div>
+            <div class="bar-track"><div class="bar-fill" style="background:var(--orange);" data-w="80"></div></div>
+            <div class="bar-val">4</div>
+          </div>
+          <div class="bar-row" style="opacity:0.35;">
+            <div class="bar-lbl">SUN</div>
+            <div class="bar-track"><div class="bar-fill" data-w="0"></div></div>
+            <div class="bar-val">—</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="meta-list">
+          <div>Week total   <span class="hi">21 words</span></div>
+          <div>Prev. week   <span class="lo">18 words</span></div>
+          <div>Change       <span class="hi">+16.7%</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Row 3: Heatmap ── -->
+    <div class="panel" style="animation-delay:0.36s;">
+      <div class="c tl"></div><div class="c br"></div>
+      <div class="sec-label">Activity Map · Last 13 Weeks</div>
+
+      <div class="heatmap-outer">
+        <div class="heatmap-day-labels">
+          <div class="day-lbl">Sun</div>
+          <div class="day-lbl">Mon</div>
+          <div class="day-lbl">Tue</div>
+          <div class="day-lbl">Wed</div>
+          <div class="day-lbl">Thu</div>
+          <div class="day-lbl">Fri</div>
+          <div class="day-lbl">Sat</div>
+        </div>
+        <div class="heatmap-right">
+          <div class="month-labels" id="month-labels"></div>
+          <div class="heatmap-grid" id="heatmap"></div>
+        </div>
+      </div>
+
+      <div class="heatmap-legend">
+        <span>Less</span>
+        <div class="leg-cell" style="background:var(--bg3); border-color:var(--line);"></div>
+        <div class="leg-cell" style="background:#163f48; border-color:#215866;"></div>
+        <div class="leg-cell" style="background:#1e6070; border-color:#2e8090;"></div>
+        <div class="leg-cell" style="background:#248490; border-color:#36a4b0;"></div>
+        <div class="leg-cell" style="background:var(--teal); border-color:#7adfe8;"></div>
+        <span>More</span>
+      </div>
+    </div>
+
+    <!-- ── Row 4: Categories + Mastery ── -->
+    <div class="row row-1-1">
+
+      <!-- Category breakdown -->
+      <div class="panel">
+        <div class="c tl"></div>
+        <div class="sec-label">By Category</div>
+        <div class="cat-list">
+          <div>
+            <div class="cat-item-hd">
+              <span class="cat-name">Software Development</span>
+              <span class="cat-count">18 words</span>
+            </div>
+            <div class="cat-track"><div class="cat-fill" style="background:var(--teal);" data-w="90"></div></div>
+          </div>
+          <div>
+            <div class="cat-item-hd">
+              <span class="cat-name">AI &amp; Machine Learning</span>
+              <span class="cat-count">12 words</span>
+            </div>
+            <div class="cat-track"><div class="cat-fill" style="background:var(--orange);" data-w="60"></div></div>
+          </div>
+          <div>
+            <div class="cat-item-hd">
+              <span class="cat-name">Business &amp; Strategy</span>
+              <span class="cat-count">8 words</span>
+            </div>
+            <div class="cat-track"><div class="cat-fill" style="background:var(--gold);" data-w="40"></div></div>
+          </div>
+          <div>
+            <div class="cat-item-hd">
+              <span class="cat-name">General Technology</span>
+              <span class="cat-count">6 words</span>
+            </div>
+            <div class="cat-track"><div class="cat-fill" style="background:var(--teal-dim);" data-w="30"></div></div>
+          </div>
+          <div>
+            <div class="cat-item-hd">
+              <span class="cat-name">Positive Phrases</span>
+              <span class="cat-count">5 words</span>
+            </div>
+            <div class="cat-track"><div class="cat-fill" style="background:#7a6abf;" data-w="25"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mastery levels -->
+      <div class="panel">
+        <div class="c tr"></div>
+        <div class="sec-label">Mastery Level</div>
+        <div class="mastery-list">
+          <div class="mastery-item">
+            <div>
+              <div class="mastery-label">Fluent</div>
+              <div class="mastery-sub">Can use in context</div>
+            </div>
+            <div class="mastery-num" style="color:var(--teal);">8</div>
+          </div>
+          <div class="mastery-item">
+            <div>
+              <div class="mastery-label">Familiar</div>
+              <div class="mastery-sub">Recognize &amp; understand</div>
+            </div>
+            <div class="mastery-num" style="color:var(--gold);">19</div>
+          </div>
+          <div class="mastery-item">
+            <div>
+              <div class="mastery-label">Learning</div>
+              <div class="mastery-sub">Still in review</div>
+            </div>
+            <div class="mastery-num" style="color:var(--orange);">17</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="meta-list">
+          <div>Retention rate  <span class="hi">84%</span></div>
+          <div>Review due today <span style="color:var(--orange);">7 words</span></div>
+          <div>Next milestone   <span class="lo">50 words</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- end .gap2 -->
+
+</div><!-- end .wrap -->
+
+<script>
+  // ── Counter animation ──────────────────────────────────────────
+  function animCount(el, target, duration) {
+    const start = performance.now();
+    (function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const e = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(e * target);
+      if (t < 1) requestAnimationFrame(tick);
+    })(start);
+  }
+
+  // ── Progress ring ──────────────────────────────────────────────
+  function animRing(pct) {
+    const circ = 326.73;
+    const arc  = document.getElementById('ring-arc');
+    const target = circ * (1 - pct);
+    // Trigger transition after brief delay so initial state is rendered
+    setTimeout(() => {
+      arc.classList.add('animate');
+      arc.style.strokeDashoffset = target;
+    }, 600);
+  }
+
+  // ── Bar fills ─────────────────────────────────────────────────
+  function animBars() {
+    document.querySelectorAll('.bar-fill, .cat-fill').forEach(el => {
+      el.style.width = (el.dataset.w || 0) + '%';
+    });
+  }
+
+  // ── Heatmap ───────────────────────────────────────────────────
+  function buildHeatmap() {
+    const grid   = document.getElementById('heatmap');
+    const months = document.getElementById('month-labels');
+    const WEEKS  = 13;
+
+    // Synthetic activity data (0–4)
+    const raw = [
+      [0,1,0,2,1,0,0],
+      [1,0,2,1,0,2,0],
+      [0,2,1,3,2,1,0],
+      [1,1,0,2,3,1,0],
+      [0,2,2,1,2,0,1],
+      [1,0,3,2,1,3,0],
+      [0,2,1,3,3,2,1],
+      [1,3,2,4,2,3,0],
+      [0,2,3,3,4,2,1],
+      [1,3,4,3,2,4,0],
+      [0,3,3,4,3,3,1],
+      [1,4,3,4,4,3,0],
+      [0,4,4,3,4,3,0],
+    ];
+
+    // Month label placement (one label per first week of month)
+    // 13 weeks back from April 13 ≈ Jan 13 → weeks span Jan, Feb, Mar, Apr
+    const monthAt = { 0:'JAN', 4:'FEB', 8:'MAR', 11:'APR' };
+
+    for (let w = 0; w < WEEKS; w++) {
+      // Month label cell
+      const ml = document.createElement('div');
+      ml.className = 'm-lbl';
+      ml.textContent = monthAt[w] || '';
+      months.appendChild(ml);
+
+      // Week column
+      const col = document.createElement('div');
+      col.className = 'hmap-week';
+      raw[w].forEach(v => {
+        const cell = document.createElement('div');
+        cell.className = 'hmap-cell';
+        cell.dataset.v = v;
+        col.appendChild(cell);
+      });
+      grid.appendChild(col);
+    }
+  }
+
+  // ── Init ──────────────────────────────────────────────────────
+  buildHeatmap();
+
+  window.addEventListener('load', () => {
+    setTimeout(() => animCount(document.getElementById('word-counter'), 50, 1400), 150);
+    setTimeout(() => animBars(), 350);
+    animRing(0.62);
+  });
+</script>
+</body>
+</html>
