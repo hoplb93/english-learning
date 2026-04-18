@@ -68,6 +68,9 @@
 | 58 | **take advantage of** | phrasal verb | B2 | to make good use of an opportunity, resource, or situation | utilise, capitalise on, make the most of, leverage | "We took advantage of the AWS free tier to prototype the new service before committing to a full infrastructure investment." |
 | 59 | **is another area to pay attention to** | phrase | C1 | used to highlight an additional important aspect that should not be overlooked | also deserves attention, is worth noting, should also be considered | "Performance optimisation is another area to pay attention to when building high-traffic web applications." |
 | 60 | **specialization** | noun | C1 | the process of focusing on and becoming expert in a particular area of knowledge or skill | focus area, niche, expertise area, field of expertise | "As the tech industry grows, many developers choose a specialization such as machine learning, cybersecurity, or cloud architecture." |
+| 61 | **interpersonal skills** | noun phrase | B2 | the abilities that enable someone to communicate and interact effectively with other people | soft skills, people skills, communication skills, social skills | "Strong interpersonal skills are just as important as technical knowledge when working on a cross-functional engineering team." |
+| 62 | **cope with** | phrasal verb | B2 | to deal with a difficult situation or challenge in an effective way | deal with, handle, manage, get through, navigate | "Junior developers often struggle to cope with the pressure of on-call duties at first, but it becomes easier with experience." |
+| 63 | **equip with** | phrasal verb | B2–C1 | to provide someone with the tools, knowledge, or skills they need to handle something | provide with, prepare with, arm with, furnish with | "A good onboarding programme equips new engineers with the context and tools they need to contribute from day one." |
 
 ---
 
@@ -82,3 +85,4 @@
 | 2026-04-11 | — | struggle, scenario, criteria, I am of the firm conviction that, articulate, highly skilled programmers |
 | 2026-04-11 | — | milestone, account for, make the most of, agile, deprecated, deep dive, pain point, on the fly, seamless, overhead, end-to-end, throughput, workaround, dependency |
 | 2026-04-13 | — | streamline, broaden, deepen, sharpen, boost, foster, encounter, take advantage of, is another area to pay attention to, specialization |
+| 2026-04-18 | — | interpersonal skills, cope with, equip with |
