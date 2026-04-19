@@ -79,6 +79,8 @@
 | 69 | **reach the zenith of success** | phrase | C1 | to arrive at the highest possible point of achievement or accomplishment | hit the peak, reach the pinnacle, achieve the summit, be at the top of one's career | "He reached the zenith of his career when he was appointed CTO of one of the world's most influential AI companies." |
 | 70 | **shoulder responsibilities** | phrase | C1 | to take on and carry the burden of duties or obligations | bear responsibilities, take on duties, carry the weight of, assume responsibilities | "When the team lead resigned unexpectedly, the senior engineer had to shoulder responsibilities for both delivery and people management." |
 | 71 | **reservoir of knowledge** | noun phrase | C1 | a large store or deep supply of knowledge and expertise | wealth of knowledge, deep knowledge base, vast store of expertise, pool of knowledge | "Working alongside senior engineers gives junior developers access to a reservoir of knowledge built over decades of hands-on experience." |
+| 72 | **thanks to** | phrase | B1 | because of someone or something; used to indicate the cause or reason for a result | because of, due to, as a result of, owing to | "Thanks to the new caching layer, the API response time dropped from 800ms to under 50ms." |
+| 73 | **robust** | adjective | B2 | strong, reliable, and able to perform well under difficult conditions or heavy use | reliable, resilient, solid, sturdy, dependable | "We need a robust error-handling strategy before we can take this service to production." |
 
 ---
 
@@ -95,3 +97,4 @@
 | 2026-04-13 | — | streamline, broaden, deepen, sharpen, boost, foster, encounter, take advantage of, is another area to pay attention to, specialization |
 | 2026-04-18 | — | interpersonal skills, cope with, equip with |
 | 2026-04-18 | — | for the sake of, play a vital role in, pose huge threats to, pour a huge amount of money into, land a dream job, reach the zenith of success, shoulder responsibilities, reservoir of knowledge |
+| 2026-04-19 | — | thanks to, robust |
