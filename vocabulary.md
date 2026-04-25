@@ -88,6 +88,10 @@
 | 78 | **I just want to make sure I'm not missing anything** | phrase | B2–C1 | used before starting work to double-check requirements and avoid misunderstandings | I want to be thorough, just checking we've covered everything, before I proceed | "I just want to make sure I'm not missing anything — is there any edge case we haven't covered yet?" |
 | 79 | **happy to jump on a quick call if that helps** | phrase | C1 | offering a voice or video call when a text conversation becomes too complex to resolve efficiently | we could hop on a call, I can call you if easier, would a call help | "This might be easier to explain live — happy to jump on a quick call if that helps." |
 | 80 | **just to make sure we're on the same page** | phrase | B2 | confirming shared understanding between you and the client before moving forward | making sure we're aligned, checking we agree, just to confirm we understand each other | "Just to make sure we're on the same page — you want this to apply to all users, not just admins, correct?" |
+| 81 | **when it comes to** | phrase | B2 | used to introduce a specific topic or area you are about to discuss | regarding, as for, in terms of, on the subject of | "When it comes to performance, we still have some optimisation work to do before the release." |
+| 82 | **on top of that** | phrase | B2 | used to add an extra point, often making a situation more notable or worse | in addition, furthermore, besides that, what's more | "The deployment failed twice. On top of that, the rollback took longer than expected." |
+| 83 | **other than that** | phrase | B2 | used to say that everything else is fine or different, apart from what was just mentioned | apart from that, aside from that, except for that, beyond that | "There was a minor issue with the date format. Other than that, the feature is working as expected." |
+| 84 | **having said that** | phrase | B2–C1 | used to introduce a contrasting or qualifying point after what was just stated | that being said, however, nonetheless, even so | "The deadline is tight. Having said that, I think we can still deliver the core features on time." |
 
 ---
 
@@ -106,3 +110,4 @@
 | 2026-04-18 | — | for the sake of, play a vital role in, pose huge threats to, pour a huge amount of money into, land a dream job, reach the zenith of success, shoulder responsibilities, reservoir of knowledge |
 | 2026-04-19 | — | thanks to, robust |
 | 2026-04-25 | streamline, trade-off, landed her dream job, align with | correct me if I'm wrong but, just to recap, so if I understand you correctly, does that sound right to you, I just want to make sure I'm not missing anything, happy to jump on a quick call if that helps, just to make sure we're on the same page |
+| 2026-04-25 | — | when it comes to, on top of that, other than that, having said that |
