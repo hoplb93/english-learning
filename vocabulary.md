@@ -81,6 +81,13 @@
 | 71 | **reservoir of knowledge** | noun phrase | C1 | a large store or deep supply of knowledge and expertise | wealth of knowledge, deep knowledge base, vast store of expertise, pool of knowledge | "Working alongside senior engineers gives junior developers access to a reservoir of knowledge built over decades of hands-on experience." |
 | 72 | **thanks to** | phrase | B1 | because of someone or something; used to indicate the cause or reason for a result | because of, due to, as a result of, owing to | "Thanks to the new caching layer, the API response time dropped from 800ms to under 50ms." |
 | 73 | **robust** | adjective | B2 | strong, reliable, and able to perform well under difficult conditions or heavy use | reliable, resilient, solid, sturdy, dependable | "We need a robust error-handling strategy before we can take this service to production." |
+| 74 | **correct me if I'm wrong, but** | phrase | B2 | used to softly check your own understanding before proceeding, inviting the other person to confirm or correct | if I'm not mistaken, tell me if I'm off, just checking | "Correct me if I'm wrong, but the button should only appear after the user logs in, right?" |
+| 75 | **just to recap** | phrase | B2 | used to summarise what was agreed so nothing gets missed | to summarise, to go over what we agreed, in summary | "Just to recap — we're fixing the export bug first, then moving on to the dashboard feature." |
+| 76 | **so if I understand you correctly** | phrase | B2 | restating the client's request to confirm you understood it right | so what you're saying is, if I've got this right, to paraphrase | "So if I understand you correctly, you want the report to refresh automatically every hour?" |
+| 77 | **does that sound right to you** | phrase | B2 | inviting the client to confirm or correct your understanding or proposal | does that work for you, is that correct, would you agree | "We'll deploy on Friday night to avoid peak traffic — does that sound right to you?" |
+| 78 | **I just want to make sure I'm not missing anything** | phrase | B2–C1 | used before starting work to double-check requirements and avoid misunderstandings | I want to be thorough, just checking we've covered everything, before I proceed | "I just want to make sure I'm not missing anything — is there any edge case we haven't covered yet?" |
+| 79 | **happy to jump on a quick call if that helps** | phrase | C1 | offering a voice or video call when a text conversation becomes too complex to resolve efficiently | we could hop on a call, I can call you if easier, would a call help | "This might be easier to explain live — happy to jump on a quick call if that helps." |
+| 80 | **just to make sure we're on the same page** | phrase | B2 | confirming shared understanding between you and the client before moving forward | making sure we're aligned, checking we agree, just to confirm we understand each other | "Just to make sure we're on the same page — you want this to apply to all users, not just admins, correct?" |
 
 ---
 
@@ -98,3 +105,4 @@
 | 2026-04-18 | — | interpersonal skills, cope with, equip with |
 | 2026-04-18 | — | for the sake of, play a vital role in, pose huge threats to, pour a huge amount of money into, land a dream job, reach the zenith of success, shoulder responsibilities, reservoir of knowledge |
 | 2026-04-19 | — | thanks to, robust |
+| 2026-04-25 | streamline, trade-off, landed her dream job, align with | correct me if I'm wrong but, just to recap, so if I understand you correctly, does that sound right to you, I just want to make sure I'm not missing anything, happy to jump on a quick call if that helps, just to make sure we're on the same page |
